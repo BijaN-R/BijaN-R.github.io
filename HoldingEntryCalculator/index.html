@@ -32,6 +32,9 @@ body {
            max(var(--page-padding), env(safe-area-inset-bottom))
            max(var(--page-padding), env(safe-area-inset-left));
 }
+.maneuver { margin-top:15px; }
+.maneuver h2 { font-size:1rem; margin:0; }
+.maneuver ol { margin:6px 0 0; padding-inline-start:1.5em; }
 </style>
 </head>
 <body>
@@ -58,6 +61,10 @@ body {
   </div>
   <div class="legend"><span><i class="swatch" style="background:var(--mint)"></i>Heading</span><span><i class="swatch" style="background:var(--blue)"></i>Inbound</span></div>
   <section class="result" aria-live="polite" aria-atomic="true"><span class="eyebrow">Calculated Entry</span><div id="entry" class="entry">Teardrop Entry</div><div class="stats"><div class="stat"><span>Outbound</span><strong id="outbound">270°</strong></div><div class="stat"><span>Signed Angle Difference</span><strong id="difference">90°</strong></div></div><p id="description" class="description">The selected heading and inbound course fall in the Teardrop entry sector.</p></section>
+  <section class="result maneuver" aria-live="polite" aria-atomic="true">
+    <h2 id="maneuverTitle">After the Fix</h2>
+    <ol id="maneuverSteps"></ol>
+  </section>
   <button id="reset" class="reset" type="button">Reset Example</button>
 </section>
 <p class="foot">For training purposes only. In flight, consider the approach to the fix, wind, protected airspace, the applicable chart, and ATC instructions. More than one entry may be acceptable at sector boundaries.</p>
@@ -70,9 +77,27 @@ body {
  const rightButton=document.getElementById('rightButton'),leftButton=document.getElementById('leftButton');
  const entryEl=document.getElementById('entry'),outboundEl=document.getElementById('outbound'),diffEl=document.getElementById('difference'),descEl=document.getElementById('description');
  const headingRotate=document.getElementById('headingRotate'),inboundRotate=document.getElementById('inboundRotate'),sectorRotate=document.getElementById('sectorRotate'),sector=document.getElementById('sector');
+ const maneuverTitle=document.getElementById('maneuverTitle'),maneuverSteps=document.getElementById('maneuverSteps');
  let heading=180,inbound=90,direction='right';
  const fmt=n=>String(n).padStart(3,'0')+'°';
  const normalize=n=>((Math.round(n)%360)+360)%360;
+ function renderManeuver(entry,outbound){
+  const inboundCourse=fmt(inbound);
+  const teardropHeading=fmt(normalize(outbound+(direction==='right'?-30:30)));
+  const steps={
+   Parallel:[`Turn to the nominal outbound heading ${fmt(outbound)} and fly parallel to the holding course for 60 seconds.`,
+    `Turn ${direction} through more than 180° and return to the fix or intercept the ${inboundCourse} inbound course.`],
+   Teardrop:[`Turn to the nominal teardrop heading ${teardropHeading} and fly it for 60 seconds.`,
+    `Turn ${direction} to intercept the ${inboundCourse} inbound course.`],
+   Direct:[`Turn ${direction} to follow the holding pattern.`]
+  };
+  maneuverTitle.textContent=`After the Fix · ${entry} Entry`;
+  maneuverSteps.replaceChildren(...steps[entry].map(instruction=>{
+   const step=document.createElement('li');
+   step.textContent=instruction;
+   return step;
+  }));
+ }
  function render(){
   const outbound=(inbound+180)%360;
   const diff=((heading-inbound+540)%360)-180;
@@ -85,6 +110,7 @@ body {
   leftButton.setAttribute('aria-pressed',String(direction==='left'));
   entryEl.textContent=entry+' Entry';outboundEl.textContent=fmt(outbound);diffEl.textContent=diff+'°';
   descEl.textContent='The selected heading and inbound course fall in the '+entry+' entry sector.';
+  renderManeuver(entry,outbound);
   headingRotate.setAttribute('transform',`rotate(${heading} 170 130)`);
   inboundRotate.setAttribute('transform',`rotate(${inbound} 170 130)`);
   sectorRotate.setAttribute('transform',`rotate(${inbound} 170 130)`);

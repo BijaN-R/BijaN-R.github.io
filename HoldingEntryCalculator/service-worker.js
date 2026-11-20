@@ -1,6 +1,6 @@
 const scope = self.registration.scope;
 const cachePrefix = 'holding-entry:' + scope + ':';
-const cacheName = cachePrefix + 'v2';
+const cacheName = cachePrefix + 'v3';
 const appShell = new URL('index.html', scope).href;
 const assets = [
   'index.html',
