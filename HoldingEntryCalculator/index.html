@@ -13,7 +13,7 @@ main{max-width:770px;margin:auto}.top{text-align:center;margin-bottom:22px}.top 
 .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,4vw,28px)}.control label{font-size:.92rem;color:var(--muted);font-weight:600;display:block;margin-bottom:5px}.number-wrap{display:flex;align-items:center;gap:7px;direction:ltr;width:max-content;max-width:100%;margin-bottom:10px}.number-wrap input{width:100px;max-width:100%;background:#0e1929;border:1px solid #47617b;border-radius:10px;color:var(--txt);padding:5px 9px;font:700 1.65rem/1.4 "Segoe UI",Tahoma,sans-serif;text-align:center;font-variant-numeric:tabular-nums;outline-offset:2px}.number-wrap input:focus-visible{outline:2px solid var(--blue)}.degree{font-size:1.5rem;font-weight:700}
 input[type=range]{direction:ltr;width:100%;accent-color:var(--mint);cursor:pointer;touch-action:pan-y;height:28px;margin:0}input[type=range]:focus-visible{outline:2px solid var(--blue);outline-offset:4px}.limits{display:flex;justify-content:space-between;color:var(--muted);direction:ltr;font-size:.76rem;margin-top:-4px}
 .direction-label{display:block;color:var(--muted);font-size:.92rem;font-weight:600;margin-top:18px;margin-bottom:7px}.segments{display:grid;grid-template-columns:1fr 1fr;gap:7px;background:#0e1929;border-radius:13px;padding:5px}.segments button{min-height:44px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);font:600 1rem "Segoe UI",Tahoma,sans-serif;cursor:pointer}.segments button[aria-pressed=true]{background:#294567;border-color:#507aa3;color:white}.segments button:focus-visible,.reset:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.figure{max-width:560px;margin:15px auto 2px}.figure svg{width:100%;height:auto;display:block;overflow:visible}.legend{display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:.81rem;margin:0 0 18px}.legend span{display:inline-flex;align-items:center;gap:7px}.swatch{width:19px;height:3px;border-radius:4px;display:inline-block}
+.figure{max-width:560px;margin:15px auto 2px}.figure svg{width:100%;height:auto;display:block;overflow:visible}.legend{display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:.81rem;margin:0 0 18px}.legend span{display:inline-flex;align-items:center;gap:7px}.swatch{width:19px;height:3px;border-radius:4px;display:inline-block}.swatch.dashed{height:0;border-top:3px dashed var(--amber)}.figure-cap{color:var(--muted);font-size:.82rem;text-align:center;margin:2px 0 18px}
 .result{background:var(--panel2);border:1px solid #344963;border-radius:17px;padding:18px}.eyebrow{color:var(--muted);font-size:.85rem}.entry{font-size:clamp(1.7rem,5vw,2.4rem);font-weight:800;line-height:1.3;margin:4px 0 15px;direction:ltr;text-align:left}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{padding:10px;background:#111f32;border-radius:11px}.stat span{display:block;color:var(--muted);font-size:.77rem}.stat strong{font-size:1.15rem;font-variant-numeric:tabular-nums;direction:ltr;display:block;text-align:left}.description{color:#d4e0ec;font-size:.89rem;margin:12px 0 0}
 .reset{width:100%;padding:12px;margin-top:15px;border:1px solid #53708f;border-radius:11px;background:transparent;color:var(--txt);font:600 .95rem Tahoma,"Segoe UI",sans-serif;cursor:pointer}.reset:hover{background:#263951}.foot{color:var(--muted);font-size:.78rem;margin:18px auto 0;text-align:center;max-width:670px}
 @media(max-width:480px){.controls{gap:15px}.number-wrap input{width:77px;font-size:1.38rem}.degree{font-size:1.3rem}.panel{border-radius:16px}.stat strong{font-size:1.05rem}.stats{gap:8px}.entry{font-size:1.75rem}}@media(max-width:330px){.controls{grid-template-columns:1fr}.number-wrap input{width:110px}}
@@ -48,18 +48,27 @@ body {
   <span class="direction-label">Holding Turn Direction</span>
   <div class="segments" role="group" aria-label="Turn direction"><button id="rightButton" type="button" aria-pressed="true">Right Turn</button><button id="leftButton" type="button" aria-pressed="false">Left Turn</button></div>
   <div class="figure">
-    <svg viewBox="0 0 340 260" role="img" aria-labelledby="compassTitle compassDesc" xmlns="http://www.w3.org/2000/svg">
-      <title id="compassTitle">Compass and course diagram</title><desc id="compassDesc">The green arrow shows the aircraft heading, the dashed blue line shows the inbound course, and the yellow area illustrates the holding sector.</desc>
-      <circle cx="170" cy="130" r="99" fill="none" stroke="currentColor" stroke-opacity=".24" stroke-width="1.5"/>
-      <g stroke="currentColor" stroke-opacity=".16" stroke-dasharray="3 5"><path d="M170 31V229 M71 130H269"/></g>
-      <g fill="currentColor" font-size="12" font-weight="600" text-anchor="middle" font-family="Arial, sans-serif"><text x="170" y="19">N</text><text x="286" y="134">E</text><text x="170" y="252">S</text><text x="54" y="134">W</text></g>
-      <g id="sectorRotate"><path id="sector" fill="#fbbf24" fill-opacity=".21"/></g>
-      <g id="headingRotate"><line x1="170" y1="130" x2="170" y2="48" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/><path d="M170 39L163 58L170 54L177 58Z" fill="#2dd4bf"/></g>
-      <g id="inboundRotate"><line x1="170" y1="205" x2="170" y2="55" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="7 5"/><path d="M170 48L164 61H176Z" fill="#60a5fa"/></g>
-      <circle cx="170" cy="130" r="5" fill="currentColor"/><text x="182" y="146" fill="currentColor" font-family="Arial, sans-serif" font-size="11">FIX</text>
+    <svg viewBox="0 0 360 340" role="img" aria-labelledby="compassTitle compassDesc" xmlns="http://www.w3.org/2000/svg">
+      <title id="compassTitle">Compass and holding pattern diagram</title><desc id="compassDesc">The racetrack is the holding pattern. The mint line is the aircraft arriving at the fix, the dashed blue line is the inbound course, and the dashed coloured line is the first move after the fix.</desc>
+      <circle cx="180" cy="170" r="145" fill="none" stroke="currentColor" stroke-opacity=".24" stroke-width="1.5"/>
+      <g stroke="currentColor" stroke-opacity=".16" stroke-dasharray="3 5"><path d="M180 25V315 M35 170H325"/></g>
+      <g fill="currentColor" font-size="12" font-weight="600" text-anchor="middle" font-family="Arial, sans-serif"><text x="180" y="18">N</text><text x="346" y="174">E</text><text x="180" y="336">S</text><text x="14" y="174">W</text></g>
+      <g id="patternRotate">
+        <path id="racetrack" d="M0 105 L0 0 A30 30 0 0 1 60 0 L60 105 A30 30 0 0 1 0 105 Z" fill="#ffffff" fill-opacity=".05" stroke="#e8eef7" stroke-width="2.5"/>
+        <line id="inboundLine" x1="0" y1="-34" x2="0" y2="-122" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="7 5"/>
+        <g fill="#e8eef7"><path d="M-6 62 L6 62 L0 50 Z"/><path d="M54 44 L66 44 L60 56 Z"/></g>
+        <path id="entryPath" d="" fill="none" stroke="#fb923c" stroke-width="3" stroke-dasharray="7 5" stroke-linecap="round"/>
+        <path id="entryArrow" d="M0 -11 L8 8 L-8 8 Z" fill="#fb923c"/>
+      </g>
+      <g id="approachRotate">
+        <line id="approachLine" x1="0" y1="0" x2="0" y2="0" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+        <path id="plane" d="M0 -11 L7 8 L0 4 L-7 8 Z" fill="#2dd4bf"/>
+      </g>
+      <circle cx="180" cy="170" r="6" fill="#fbbf24" stroke="#0b1220" stroke-width="1.5"/><text x="180" y="198" fill="currentColor" font-family="Arial, sans-serif" font-size="11" text-anchor="middle">FIX</text>
     </svg>
   </div>
-  <div class="legend"><span><i class="swatch" style="background:var(--mint)"></i>Heading</span><span><i class="swatch" style="background:var(--blue)"></i>Inbound</span></div>
+  <p class="figure-cap">The racetrack turns with the inbound course. The dashed line is the first move after the fix.</p>
+  <div class="legend"><span><i class="swatch" style="background:var(--mint)"></i>Heading</span><span><i class="swatch" style="background:var(--blue)"></i>Inbound</span><span><i class="swatch" style="background:#e8eef7"></i>Holding pattern</span><span><i id="entrySwatch" class="swatch dashed" style="border-top-color:#fb923c"></i><span id="entryLegend">Entry path</span></span></div>
   <section class="result" aria-live="polite" aria-atomic="true"><span class="eyebrow">Calculated Entry</span><div id="entry" class="entry">Teardrop Entry</div><div class="stats"><div class="stat"><span>Outbound</span><strong id="outbound">270°</strong></div><div class="stat"><span>Signed Angle Difference</span><strong id="difference">90°</strong></div></div><p id="description" class="description">The selected heading and inbound course fall in the Teardrop entry sector.</p></section>
   <section class="result maneuver" aria-live="polite" aria-atomic="true">
     <h2 id="maneuverTitle">After the Fix</h2>
@@ -76,7 +85,7 @@ body {
  const inboundNumber=document.getElementById('inboundNumber'),inboundRange=document.getElementById('inboundRange');
  const rightButton=document.getElementById('rightButton'),leftButton=document.getElementById('leftButton');
  const entryEl=document.getElementById('entry'),outboundEl=document.getElementById('outbound'),diffEl=document.getElementById('difference'),descEl=document.getElementById('description');
- const headingRotate=document.getElementById('headingRotate'),inboundRotate=document.getElementById('inboundRotate'),sectorRotate=document.getElementById('sectorRotate'),sector=document.getElementById('sector');
+ const patternRotate=document.getElementById('patternRotate'),approachRotate=document.getElementById('approachRotate'),approachLine=document.getElementById('approachLine'),plane=document.getElementById('plane'),entryPath=document.getElementById('entryPath'),entryArrow=document.getElementById('entryArrow'),entrySwatch=document.getElementById('entrySwatch'),entryLegend=document.getElementById('entryLegend');
  const maneuverTitle=document.getElementById('maneuverTitle'),maneuverSteps=document.getElementById('maneuverSteps');
  let heading=180,inbound=90,direction='right';
  const fmt=n=>String(n).padStart(3,'0')+'°';
@@ -103,6 +112,8 @@ body {
   const diff=((heading-inbound+540)%360)-180;
   const adjusted=direction==='right'?diff:-diff;
   const entry=adjusted < -110 ? 'Parallel' : adjusted >70 ? 'Teardrop' : 'Direct';
+  const entryStyle={Direct:{color:'#34d399',d:'M0 0 A30 30 0 0 1 60 0 L60 105',end:[60,105],endHeading:180},Parallel:{color:'#c084fc',d:'M0 0 L-16 18 L-20 72',end:[-20,72],endHeading:184},Teardrop:{color:'#fb923c',d:'M0 0 L36 62',end:[36,62],endHeading:150}}[entry];
+  const sgn=direction==='right'?1:-1;
   headingRange.value=heading;inboundRange.value=inbound;
   if(document.activeElement!==headingNumber)headingNumber.value=heading;
   if(document.activeElement!==inboundNumber)inboundNumber.value=inbound;
@@ -111,10 +122,14 @@ body {
   entryEl.textContent=entry+' Entry';outboundEl.textContent=fmt(outbound);diffEl.textContent=diff+'°';
   descEl.textContent='The selected heading and inbound course fall in the '+entry+' entry sector.';
   renderManeuver(entry,outbound);
-  headingRotate.setAttribute('transform',`rotate(${heading} 170 130)`);
-  inboundRotate.setAttribute('transform',`rotate(${inbound} 170 130)`);
-  sectorRotate.setAttribute('transform',`rotate(${inbound} 170 130)`);
-  sector.setAttribute('d',direction==='right'?'M170 130 L77 89 A99 99 0 0 1 263 89 Z':'M170 130 L263 89 A99 99 0 0 0 77 89 Z');
+  patternRotate.setAttribute('transform',`translate(180 170) rotate(${inbound}) scale(${sgn} 1)`);
+  approachRotate.setAttribute('transform',`translate(180 170) rotate(${inbound})`);
+  const rel=((heading-inbound+540)%360)-180,relRad=rel*Math.PI/180,ux=Math.sin(relRad),uy=-Math.cos(relRad),ax=-ux*125,ay=-uy*125;
+  approachLine.setAttribute('x1',ax);approachLine.setAttribute('y1',ay);approachLine.setAttribute('x2',0);approachLine.setAttribute('y2',0);
+  plane.setAttribute('transform',`translate(${ax} ${ay}) rotate(${rel})`);
+  entryPath.setAttribute('d',entryStyle.d);entryPath.setAttribute('stroke',entryStyle.color);
+  entryArrow.setAttribute('transform',`translate(${entryStyle.end[0]} ${entryStyle.end[1]}) rotate(${entryStyle.endHeading})`);entryArrow.setAttribute('fill',entryStyle.color);
+  entryEl.style.color=entryStyle.color;entrySwatch.style.borderTopColor=entryStyle.color;entryLegend.textContent=entry+' path';
  }
  function bind(range,num,key){
   range.addEventListener('input',()=>{if(key==='heading')heading=Number(range.value);else inbound=Number(range.value);num.value=range.value;render();});
